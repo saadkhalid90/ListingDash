@@ -125,11 +125,31 @@ function(input, output) {
     DT::datatable((CLUST_list_data), options = list(pageLength = 100))
   })
   
+  ## data table for monitoring eligible HHs
+  output$eligHH <- DT::renderDataTable({
+    
+    elig_HH_data <- subset(dataIn()$list_data %>% 
+                             select(CLUSTER_NO, ADDRESS ,NAME_HH_HEAD, SRNO_OF_ELIGIBLE_HH), 
+                           CLUSTER_NO == input$selectCluster1 & (!is.na(SRNO_OF_ELIGIBLE_HH))) %>%
+      arrange(SRNO_OF_ELIGIBLE_HH)
+    
+    DT::datatable((elig_HH_data), options = list(pageLength = 50, bAutoWidth = FALSE,
+                                                 scrollX = TRUE, 
+                                                 columnDefs = list(list(width = '700px', targets = c(2)))
+    ))
+  })
+  
   ## get UI input for the cluster number, all unique cluster numbers within the dataset
   output$ClustSelect <- renderUI({
     avail_clusters <- as.numeric(levels(as.factor((dataIn()$list_data)$CLUSTER_NO)))
     avail_clusters_list <- as.list(avail_clusters)
     selectInput("selectCluster", label = h3("Select Cluster"), avail_clusters_list)
+  })
+  
+  output$ClustSelect1 <- renderUI({
+    avail_clusters <- as.numeric(levels(as.factor((dataIn()$list_data)$CLUSTER_NO)))
+    avail_clusters_list <- as.list(avail_clusters)
+    selectInput("selectCluster1", label = h3("Select Cluster"), avail_clusters_list)
   })
   
   ## Set up data download options for district and cluster level summaries as well

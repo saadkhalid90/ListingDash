@@ -40,7 +40,12 @@ fluidPage(
                          br(),
                          dateInput("date_select", label = "Select Date", value = Sys.Date()),
                          br(),
-                         DT::dataTableOutput("tabledateClust"))
+                         DT::dataTableOutput("tabledateClust")),
+                tabPanel("Eligible HHs",
+                         br(),
+                         uiOutput("ClustSelect1"),
+                         br(),
+                         DT::dataTableOutput("eligHH"))
     )
   )
 )
